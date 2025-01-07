@@ -31,6 +31,10 @@ button:hover {
     border: 1px solid rgb(255, 255, 255);
 }
 
+label {
+    color: #ffffff;
+}
+
 area {
     height: 50px;
 }
