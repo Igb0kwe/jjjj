@@ -21,34 +21,26 @@ def home():
 # Define prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
-    global df
     try:
-        # Extract the area and location from the form input
         area_input = request.form["area"]
-        location_input = str(request.form["location"])
+        location_input = request.form["location"]
 
-        # Validate input type
-        try:
-            area = float(area_input)  # Convert input to float
-        except ValueError:
-            raise ValueError("Input must be a numeric value.")
+        # Process area input
+        area = float(area_input)
+        area = np.array(area)
 
-        # Dictionary for model lookup
-        models = {
-            "Abuja": modelabj,
-            "Lagos": modellag,
-            "Maiduguri": modelmaid,
-            "Kano": modelkano,
-        }
+        # Handle prediction based on location
+        if location_input == "Abuja":
+            prediction = modelabj.predict(area)
+        elif location_input == "Lagos":
+            prediction = modelabj.predict(area)
+        elif location_input == "Maiduguri":
+            prediction = modelabj.predict(area)
+        elif location_input == "Kano":
+            prediction = modelabj.predict(area)
 
-        # Validate location
-        if location_input not in models:
-            raise ValueError("Invalid location selected.")
-
-        # Make prediction
-        model = models[location_input]
-        prediction = model.predict(np.array([[area]]))
         predicted_price = round(prediction[0], 2)
+
 
         # Render the output page with the results
         return render_template("output.html", area=area, predicted_price=predicted_price)
