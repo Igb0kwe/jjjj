@@ -33,11 +33,11 @@ def predict():
         if location_input == "Abuja":
             prediction = modelabj.predict(area)
         elif location_input == "Lagos":
-            prediction = modelabj.predict(area)
+            prediction = modellag.predict(area)
         elif location_input == "Maiduguri":
-            prediction = modelabj.predict(area)
+            prediction = modelmaid.predict(area)
         elif location_input == "Kano":
-            prediction = modelabj.predict(area)
+            prediction = modelkano.predict(area)
 
         predicted_price = round(prediction[0], 2)
 
