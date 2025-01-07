@@ -13,8 +13,6 @@ modelabj = jb.load("abjprice_model.pkl")
 modellag = jb.load("lagprice_model.pkl")
 modelkano = jb.load("kanoprice_model.pkl")
 
-df = pd.read_csv("homeprices.csv")
-
 # Create Flask app
 app = Flask(__name__)
 
