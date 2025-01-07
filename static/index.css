@@ -35,6 +35,10 @@ label {
     color: #ffffff;
 }
 
+input::placeholder {
+    width: 20px;
+}    
+
 area {
     height: 50px;
 }
