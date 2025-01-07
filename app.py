@@ -25,7 +25,7 @@ def predict():
     try:
         # Extract the area and location from the form input
         area_input = request.form["area"]
-        location_input = request.form["location"]
+        location_input = str(request.form["location"])
 
         # Validate input type
         try:
