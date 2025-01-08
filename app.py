@@ -40,8 +40,10 @@ def predict():
             prediction = modelkano.predict(area)
         else:
             raise ValueError("Invalid location selected.")
-
-        predicted_price = int(round(prediction[0][0], 0))
+            
+        #Process output data
+        predicted_price = int(round(prediction[0], 0))
+        area = float(area[0][0]))
         
         # Render the output page with the results
         return render_template("output.html", area=area, predicted_price=predicted_price, location_input = location_input)
