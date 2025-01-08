@@ -12,11 +12,6 @@ modellag = jb.load("lagprice_model.pkl")
 modelkano = jb.load("kanoprice_model.pkl")
 
 # Load dataframes
-global housepriceabj 
-global housepricelag
-global housepricemaid
-global housepricekano
-
 housepriceabj = pd.read_csv("homepricesabj.csv")
 housepricelag = pd.read_csv("homepriceslag.csv")
 housepricemaid = pd.read_csv("homepricesmaid.csv")
@@ -45,6 +40,8 @@ def predict():
         if location_input == "Abuja":
             prediction = modelabj.predict(area)
 
+            global housepriceabj 
+
             # Add new row to the dataframe if it doesn't already exist
             if not ((housepriceabj["Area"] == area_input) & (housepriceabj["Price"] == prediction)).any():
                 new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
@@ -61,7 +58,7 @@ def predict():
 
         elif location_input == "Lagos":
             prediction = modellag.predict(area)
-
+            global housepricelag
             # Add new row to the dataframe if it doesn't already exist
             if not ((housepricelag["Area"] == area_input) & (housepricelag["Price"] == prediction)).any():
                 new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
@@ -78,6 +75,8 @@ def predict():
 
         elif location_input == "Maiduguri":
             prediction = modelmaid.predict(area)
+            global housepricemaid
+
 
             # Add new row to the dataframe if it doesn't already exist
             if not ((housepricemaid["Area"] == area_input) & (housepricemaid["Price"] == prediction)).any():
@@ -95,6 +94,7 @@ def predict():
 
         elif location_input == "Kano":
             prediction = modelkano.predict(area)
+            global housepricekano
 
             # Add new row to the dataframe if it doesn't already exist
             if not ((housepricekano["Area"] == area_input) & (housepricekano["Price"] == prediction)).any():
