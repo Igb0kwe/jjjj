@@ -51,6 +51,9 @@ def handle_prediction(location_input, area_input, model, house_df, plot_filename
 # Define prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
+    # Declare the global variables
+    global housepriceabj, housepricelag, housepricemaid, housepricekano  
+    
     try:
         area_input = request.form["area"]
         location_input = request.form["location"]
