@@ -44,7 +44,7 @@ def predict():
         predicted_price = float(round(prediction[0], 2))
         
         # Render the output page with the results
-        return render_template("output.html", area=area, predicted_price=predicted_price)
+        return render_template("output.html", area=area, predicted_price=predicted_price, location_input = location_input)
 
     except Exception as e:
         # Render the error page for any exception
