@@ -46,23 +46,65 @@ def predict():
             prediction = modelabj.predict(area)
 
             # Add new row to the dataframe
-        new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
-        housepriceabj = pd.concat([housepriceabj, new_data], ignore_index=True)
+            new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
+            housepriceabj = pd.concat([housepriceabj, new_data], ignore_index=True)
 
             #Plot scatter graph
-        plt.scatter(housepriceabj["Area"], housepriceabj["Price"], color="blue", marker="+")
-        plt.title("House Price vs Area in Abuja")
-        plt.xlabel("Area (sqr ft)")
-        plt.ylabel("Price (NGN)")
-        plt.grid(True)
-        plt.show()
-
+            plt.scatter(housepriceabj["Area"], housepriceabj["Price"], color="blue", marker="+")
+            plt.title("House Price vs Area in Abuja")
+            plt.xlabel("Area (sqr ft)")
+            plt.ylabel("Price (NGN)")
+            plt.grid(True)
+            plt.show()
+            
         elif location_input == "Lagos":
             prediction = modellag.predict(area)
+            prediction = modelabj.predict(area)
+
+            # Add new row to the dataframe
+            new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
+            housepriceabj = pd.concat([housepricelag, new_data], ignore_index=True)
+
+            #Plot scatter graph
+            plt.scatter(housepriceabj["Area"], housepricelag["Price"], color="blue", marker="+")
+            plt.title("House Price vs Area in Abuja")
+            plt.xlabel("Area (sqr ft)")
+            plt.ylabel("Price (NGN)")
+            plt.grid(True)
+            plt.show()
+            
         elif location_input == "Maiduguri":
             prediction = modelmaid.predict(area)
+            prediction = modelabj.predict(area)
+
+            # Add new row to the dataframe
+            new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
+            housepriceabj = pd.concat([housepricemaid, new_data], ignore_index=True)
+
+            #Plot scatter graph
+            plt.scatter(housepriceabj["Area"], housepricemaid["Price"], color="blue", marker="+")
+            plt.title("House Price vs Area in Abuja")
+            plt.xlabel("Area (sqr ft)")
+            plt.ylabel("Price (NGN)")
+            plt.grid(True)
+            plt.show()
+            
         elif location_input == "Kano":
             prediction = modelkano.predict(area)
+            prediction = modelabj.predict(area)
+
+            # Add new row to the dataframe
+            new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
+            housepriceabj = pd.concat([housepricekano, new_data], ignore_index=True)
+
+            #Plot scatter graph
+            plt.scatter(housepriceabj["Area"], housepricekano["Price"], color="blue", marker="+")
+            plt.title("House Price vs Area in Abuja")
+            plt.xlabel("Area (sqr ft)")
+            plt.ylabel("Price (NGN)")
+            plt.grid(True)
+            plt.show()
+            
         else:
             raise ValueError("Invalid location selected.")
             
