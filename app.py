@@ -27,7 +27,7 @@ def predict():
 
         # Process area input
         area = float(area_input)
-        area = np.array(area)
+        area = np.array([[area]])
 
         # Handle prediction based on location
         if location_input == "Abuja":
