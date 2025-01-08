@@ -41,7 +41,7 @@ def predict():
         else:
             raise ValueError("Invalid location selected.")
 
-        predicted_price = float(round(prediction[0], 2))
+        predicted_price = float(round(prediction[0][0], 2))
         
         # Render the output page with the results
         return render_template("output.html", area=area, predicted_price=predicted_price, location_input = location_input)
