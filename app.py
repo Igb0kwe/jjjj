@@ -43,6 +43,8 @@ def predict():
             
         #Process output data
         predicted_price = int(round(prediction[0], 0))
+        predicted_price = f"{predicted_price:,}"
+        
         area = float(area[0][0])
         
         # Render the output page with the results
