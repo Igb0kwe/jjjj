@@ -38,10 +38,11 @@ def predict():
             prediction = modelmaid.predict(area)
         elif location_input == "Kano":
             prediction = modelkano.predict(area)
+        else:
+            raise ValueError("Invalid location selected.")
 
         predicted_price = round(prediction[0], 2)
-
-
+        
         # Render the output page with the results
         return render_template("output.html", area=area, predicted_price=predicted_price)
 
