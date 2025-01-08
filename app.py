@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import Flask, request, render_template
 import numpy as np
 import joblib as jb
 import pandas as pd
@@ -25,6 +25,29 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")  # HTML file for user input
 
+def handle_prediction(location_input, area_input, model, house_df, plot_filename):
+    area = float(area_input)
+    area_array = np.array([[area]])
+    
+    # Predict the price using the selected model
+    prediction = model.predict(area_array)
+    
+    # Add new row to the dataframe if it doesn't already exist
+    if not ((house_df["Area"] == area_input) & (house_df["Price"] == prediction[0])).any():
+        new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
+        house_df = pd.concat([house_df, new_data], ignore_index=True)
+    
+    # Plot scatter graph
+    plt.scatter(house_df["Area"], house_df["Price"], color="blue", marker="+")
+    plt.title(f"House Price vs Area in {location_input}")
+    plt.xlabel("Area (sqr ft)")
+    plt.ylabel("Price (NGN)")
+    plt.grid(True)
+    plt.savefig(f"static/{plot_filename}")
+    plt.close()
+    
+    return prediction, house_df
+
 # Define prediction route
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -32,92 +55,21 @@ def predict():
         area_input = request.form["area"]
         location_input = request.form["location"]
 
-        # Process area input
-        area = float(area_input)
-        area = np.array([[area]])
-
-        # Handle prediction based on location and avoid redundancy
         if location_input == "Abuja":
-            prediction = modelabj.predict(area)
-
-            global housepriceabj 
-
-            # Add new row to the dataframe if it doesn't already exist
-            if not ((housepriceabj["Area"] == area_input) & (housepriceabj["Price"] == prediction)).any():
-                new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
-                housepriceabj = pd.concat([housepriceabj, new_data], ignore_index=True)
-
-            # Plot scatter graph
-            plt.scatter(housepriceabj["Area"], housepriceabj["Price"], color="blue", marker="+")
-            plt.title("House Price vs Area in Abuja")
-            plt.xlabel("Area (sqr ft)")
-            plt.ylabel("Price (NGN)")
-            plt.grid(True)
-            plt.savefig("static/abj_plot.png")
-            plt.close()
-
+            prediction, housepriceabj = handle_prediction("Abuja", area_input, modelabj, housepriceabj, "abj_plot.png")
         elif location_input == "Lagos":
-            prediction = modellag.predict(area)
-            global housepricelag
-            # Add new row to the dataframe if it doesn't already exist
-            if not ((housepricelag["Area"] == area_input) & (housepricelag["Price"] == prediction)).any():
-                new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
-                housepricelag = pd.concat([housepricelag, new_data], ignore_index=True)
-
-            # Plot scatter graph
-            plt.scatter(housepricelag["Area"], housepricelag["Price"], color="blue", marker="+")
-            plt.title("House Price vs Area in Lagos")
-            plt.xlabel("Area (sqr ft)")
-            plt.ylabel("Price (NGN)")
-            plt.grid(True)
-            plt.savefig("static/lagos_plot.png")
-            plt.close()
-
+            prediction, housepricelag = handle_prediction("Lagos", area_input, modellag, housepricelag, "lagos_plot.png")
         elif location_input == "Maiduguri":
-            prediction = modelmaid.predict(area)
-            global housepricemaid
-
-
-            # Add new row to the dataframe if it doesn't already exist
-            if not ((housepricemaid["Area"] == area_input) & (housepricemaid["Price"] == prediction)).any():
-                new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
-                housepricemaid = pd.concat([housepricemaid, new_data], ignore_index=True)
-
-            # Plot scatter graph
-            plt.scatter(housepricemaid["Area"], housepricemaid["Price"], color="blue", marker="+")
-            plt.title("House Price vs Area in Maiduguri")
-            plt.xlabel("Area (sqr ft)")
-            plt.ylabel("Price (NGN)")
-            plt.grid(True)
-            plt.savefig("static/maiduguri_plot.png")
-            plt.close()
-
+            prediction, housepricemaid = handle_prediction("Maiduguri", area_input, modelmaid, housepricemaid, "maiduguri_plot.png")
         elif location_input == "Kano":
-            prediction = modelkano.predict(area)
-            global housepricekano
-
-            # Add new row to the dataframe if it doesn't already exist
-            if not ((housepricekano["Area"] == area_input) & (housepricekano["Price"] == prediction)).any():
-                new_data = pd.DataFrame({"Area": [area_input], "Price": [prediction[0]]})
-                housepricekano = pd.concat([housepricekano, new_data], ignore_index=True)
-
-            # Plot scatter graph
-            plt.scatter(housepricekano["Area"], housepricekano["Price"], color="blue", marker="+")
-            plt.title("House Price vs Area in Kano")
-            plt.xlabel("Area (sqr ft)")
-            plt.ylabel("Price (NGN)")
-            plt.grid(True)
-            plt.savefig("static/kano_plot.png")
-            plt.close()
-
+            prediction, housepricekano = handle_prediction("Kano", area_input, modelkano, housepricekano, "kano_plot.png")
         else:
             raise ValueError("Invalid location selected.")
         
         # Process output data
         predicted_price = int(round(prediction[0], 0))
         predicted_price = f"{predicted_price:,}"
-        
-        area = float(area[0][0])
+        area = float(area_input)
 
         # Render the output page with the results
         return render_template("output.html", area=area, predicted_price=predicted_price, location_input=location_input)
