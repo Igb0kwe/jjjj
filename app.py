@@ -3,12 +3,24 @@ import numpy as np
 import joblib as jb
 import pandas as pd
 import os
+import matplotlib as plt
 
 # Load the saved models
 modelmaid = jb.load("maidprice_model.pkl")
 modelabj = jb.load("abjprice_model.pkl")
 modellag = jb.load("lagprice_model.pkl")
 modelkano = jb.load("kanoprice_model.pkl")
+
+#Load dataframes
+global housepriceabj 
+global housepricelag
+global housepricemaid
+global housepricekano
+
+housepriceabj = pd.read_csv("homepricesabj.csv")
+housepricelag = pd.read_csv("homepriceslag.csv")
+housepricemaid = pd.read_csv("homepricesmaid.csv")
+housepricekano= pd.read_csv("homepriceskano.csv")
 
 # Create Flask app
 app = Flask(__name__)
@@ -32,6 +44,19 @@ def predict():
         # Handle prediction based on location
         if location_input == "Abuja":
             prediction = modelabj.predict(area)
+
+            # Add new row to the dataframe
+        new_data = pd.DataFrame({"Area": [area], "Price": [prediction]})
+        housepriceabj = pd.concat([housepriceabj, new_data], ignore_index=True)
+
+            #Plot scatter graph
+        plt.scatter(housepriceabj["Area"], housepriceabj["Price"], color="blue", marker="+")
+        plt.title("House Price vs Area in Abuja")
+        plt.xlabel("Area (sqr ft)")
+        plt.ylabel("Price (NGN)")
+        plt.grid(True)
+        plt.show()
+
         elif location_input == "Lagos":
             prediction = modellag.predict(area)
         elif location_input == "Maiduguri":
